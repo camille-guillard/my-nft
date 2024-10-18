@@ -4,8 +4,6 @@ import "../PokemonBaseSet.sol";
 
 contract PokemonBaseSetTest is PokemonBaseSet {
 
-    uint256 public s_requestId;
-
     constructor(
         string memory _nftURI,
         address _claimFundAddress,
@@ -29,20 +27,32 @@ contract PokemonBaseSetTest is PokemonBaseSet {
         _keyHash)
     { }
 
-    function randomWords() external view returns(uint256) {
-        return s_results[msg.sender];
-    }
-
     function rollDice() external {
-        s_requestId = rollDice(msg.sender);
+        userBoosters[msg.sender].requestId = rollDice(msg.sender);
     }
 
-    function getRollerByRequestId(uint256 key) external view returns (address) {
+    function getRollerByRequestId(uint256 key) external view returns(address) {
         return s_rollers[key];
     }
 
-    function getResultByAddress(address key) external view returns (uint256) {
-        return s_results[key];
+    function currentRandomNumberIndex() external view returns(uint8) {
+        return currentRandomNumberIndex(msg.sender);
+    }
+
+    function currentRandomNumber() external view returns(uint256) {
+        return currentRandomNumber(msg.sender);
+    }
+
+    function randomNumberByIndex(uint8 _index) external view returns(uint256) {
+        return userBoosters[msg.sender].s_results[_index];
+    }
+
+    function requestId() external view returns(uint256) {
+        return userBoosters[msg.sender].requestId;
+    }
+
+    function setNumberOfUnopenedBoosters(uint8 _number) external {
+        userBoosters[msg.sender].numberOfUnopenedBoosters = _number;
     }
 
 }
